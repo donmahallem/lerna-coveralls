@@ -1,0 +1,60 @@
+{
+  "name": "@donmahallem/lerna-coveralls",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "private": true,
+  "keywords": [],
+  "homepage": "https://donmahallem.github.io/lerna-coveralls/",
+  "author": {
+    "name": "donmahallem",
+    "email": "donmahallem@users.noreply.github.com",
+    "url": "https://github.com/donmahallem"
+  },
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/donmahallem/lerna-coveralls/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/donmahallem/lerna-coveralls.git"
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^13.9.2",
+    "@types/sinon": "^7.5.2",
+    "@zeit/ncc": "^0.21.1",
+    "chai": "^4.2.0",
+    "mocha": "^7.1.1",
+    "nyc": "^15.0.0",
+    "sinon": "^9.0.1",
+    "ts-node": "^8.7.0",
+    "tslint": "^6.1.0",
+    "typedoc": "^0.17.1",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "coveralls": "^3.0.9"
+  },
+  "files": [
+    "dist/*",
+    "src/*"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "mocha --config ../../.mocharc.yml",
+    "test:watch": "mocha --config ../../.mocharc.yml --watch",
+    "test:coverage": "nyc --nycrc-path ../../.nycrc.json npm run test",
+    "lint": "tslint -c tslint.json -p tsconfig.lint.json src/**/*.ts",
+    "lint:fix": "tslint --fix -c tslint.json -p tsconfig.lint.json src/**/*.ts",
+    "docs": "typedoc --options ../../typedoc.json"
+  }
+}
