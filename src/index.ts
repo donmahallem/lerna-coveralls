@@ -73,7 +73,6 @@ const run: () => Promise<void> = async (): Promise<void> => {
             } else {
                 throw new Error('Coveralls responsed with \'' + response.statusCode + '\'. ' + response.body)
             }
-            core.info(JSON.stringify(response));
         }
 
         const payload: any = {
@@ -87,7 +86,7 @@ const run: () => Promise<void> = async (): Promise<void> => {
             json: true,
             url: `${process.env.COVERALLS_ENDPOINT || 'https://coveralls.io'}/webhook`,
         });
-        console.log('resp', resp);
+        core.info('Coveralls responded', resp);
     } catch (error) {
         core.setFailed(error.message);
     }
