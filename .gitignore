@@ -1,7 +1,5 @@
 node_modules/
 data/
-dist/
-!dist/index.js
 .nyc_output/
 coverage/
 docs/
