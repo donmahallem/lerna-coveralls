@@ -63,6 +63,7 @@ const run: () => Promise<void> = async (): Promise<void> => {
             const coverallsOptions: any = await getOptions({
                 filepath: cwd,
                 flag_name: packageName,
+                parallel: true,
             });
             const covs: any = await convertLcovToCoveralls(file, coverallsOptions);
             await sendToCoveralls(covs);
