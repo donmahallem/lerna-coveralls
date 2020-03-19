@@ -4,7 +4,7 @@
 
 import * as core from '@actions/core';
 import { promiseGlob } from './promise-glob';
-import { convertLcovToCoveralls, getOptions, sendToCoveralls } from './convert-to-lcov';
+import { convertLcovToCoveralls, getOptions, sendToCoveralls, } from './convert-to-lcov';
 import * as reqp from 'request-promise-native';
 import * as path from 'path';
 import { readFileSync } from 'fs';
@@ -34,7 +34,6 @@ const run: () => Promise<void> = async (): Promise<void> => {
         process.env.COVERALLS_GIT_COMMIT = (process.env.GITHUB_SHA || '').toString();
         process.env.COVERALLS_GIT_BRANCH = (process.env.GITHUB_REF || '').toString();
 
-
         const jobId: string = getJobId();
         process.env.COVERALLS_SERVICE_JOB_ID = jobId;
         process.env.COVERALLS_SERVICE_NUMBER = jobId;
@@ -47,7 +46,9 @@ const run: () => Promise<void> = async (): Promise<void> => {
             return;
         }
         for (const pathToLcov of lcovFiles) {
-            const packageName: string = path.relative(cwd, pathToLcov).split(path.sep)[1];
+            const coverageRelativePath: string = path.relative(cwd, pathToLcov);
+            const coverageRelativePathParts: string[] = coverageRelativePath.split(path.sep);
+            const packageName: string = coverageRelativePathParts[1];
             core.info('Converting: ' + packageName);
             core.info('Cov file: ' + pathToLcov);
             let file: string;
@@ -59,9 +60,10 @@ const run: () => Promise<void> = async (): Promise<void> => {
             const p1: string = path.resolve(pathToLcov, cwd);
             const p2: string = path.resolve(cwd);
             console.log(p1, p2, path.relative(p2, p1));
-
+            const coverageWorkingDir: string = path.join(cwd, coverageRelativePathParts.slice(0, 2).join(path.sep));
+            core.info('Use working dir: ' + coverageWorkingDir)
             const coverallsOptions: any = await getOptions({
-                filepath: cwd,
+                filepath: coverageWorkingDir,
                 flag_name: packageName,
                 parallel: true,
             });

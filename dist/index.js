@@ -12973,7 +12973,9 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
             return;
         }
         for (const pathToLcov of lcovFiles) {
-            const packageName = path.relative(cwd, pathToLcov).split(path.sep)[1];
+            const coverageRelativePath = path.relative(cwd, pathToLcov);
+            const coverageRelativePathParts = coverageRelativePath.split(path.sep);
+            const packageName = coverageRelativePathParts[1];
             core.info('Converting: ' + packageName);
             core.info('Cov file: ' + pathToLcov);
             let file;
@@ -12986,8 +12988,10 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
             const p1 = path.resolve(pathToLcov, cwd);
             const p2 = path.resolve(cwd);
             console.log(p1, p2, path.relative(p2, p1));
+            const coverageWorkingDir = path.join(cwd, coverageRelativePathParts.slice(0, 2).join(path.sep));
+            core.info('Use working dir: ' + coverageWorkingDir);
             const coverallsOptions = yield convert_to_lcov_1.getOptions({
-                filepath: cwd,
+                filepath: coverageWorkingDir,
                 flag_name: packageName,
                 parallel: true,
             });
