@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "target": "es2015",
+        "module": "commonjs",
+        "outDir": "dist",
+        "rootDir": "./src",
+        "sourceMap": true,
+        "declaration": true,
+        "moduleResolution": "node",
+        "strictNullChecks": true,
+        "noUnusedLocals": true
+    },
+    "typeAcquisition": {
+        "enable": true
+    },
+    "include": [
+        "src/**/*.ts"
+    ],
+    "baseUrl": "./src",
+    "exclude": [
+        "node_modules"
+    ]
+}

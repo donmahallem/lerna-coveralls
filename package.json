@@ -30,6 +30,7 @@
     "@types/chai": "^4.2.11",
     "@types/mocha": "^7.0.2",
     "@types/node": "^13.9.2",
+    "@types/request-promise-native": "^1.0.17",
     "@types/sinon": "^7.5.2",
     "@zeit/ncc": "^0.21.1",
     "chai": "^4.2.0",
@@ -42,7 +43,10 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "coveralls": "^3.0.9"
+    "@actions/core": "^1.2.3",
+    "coveralls": "^3.0.9",
+    "glob": "^7.1.6",
+    "request-promise-native": "^1.0.8"
   },
   "files": [
     "dist/*",
@@ -50,11 +54,11 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "mocha --config ../../.mocharc.yml",
-    "test:watch": "mocha --config ../../.mocharc.yml --watch",
-    "test:coverage": "nyc --nycrc-path ../../.nycrc.json npm run test",
-    "lint": "tslint -c tslint.json -p tsconfig.lint.json src/**/*.ts",
-    "lint:fix": "tslint --fix -c tslint.json -p tsconfig.lint.json src/**/*.ts",
-    "docs": "typedoc --options ../../typedoc.json"
+    "test": "mocha --config .mocharc.yml",
+    "test:watch": "mocha --config .mocharc.yml --watch",
+    "test:coverage": "nyc --nycrc-path .nycrc.json npm run test",
+    "lint": "tslint -c tslint.json -p tsconfig.json src/**/*.ts",
+    "lint:fix": "tslint --fix -c tslint.json -p tsconfig.json src/**/*.ts",
+    "docs": "typedoc --options ./typedoc.json"
   }
 }
