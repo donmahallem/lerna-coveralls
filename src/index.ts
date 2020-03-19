@@ -86,7 +86,7 @@ const run: () => Promise<void> = async (): Promise<void> => {
             json: true,
             url: `${process.env.COVERALLS_ENDPOINT || 'https://coveralls.io'}/webhook`,
         });
-        core.info('Coveralls responded', resp);
+        core.info('Coveralls responded:' + resp);
     } catch (error) {
         core.setFailed(error.message);
     }
