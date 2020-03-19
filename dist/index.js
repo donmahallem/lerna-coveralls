@@ -12992,8 +12992,14 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
                 parallel: true,
             });
             const covs = yield convert_to_lcov_1.convertLcovToCoveralls(file, coverallsOptions);
+            console.log(covs);
             const response = yield convert_to_lcov_1.sendToCoveralls(covs);
-            core.info(JSON.stringify(response));
+            if (response.statusCode === 200) {
+                core.info('Coverage uploaded: ' + response.body);
+            }
+            else {
+                throw new Error('Coveralls responsed with \'' + response.statusCode + '\'. ' + response.body);
+            }
         }
         const payload = {
             'payload': { 'build_num': jobId, 'status': 'done' },
@@ -13005,7 +13011,7 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
             json: true,
             url: `${process.env.COVERALLS_ENDPOINT || 'https://coveralls.io'}/webhook`,
         });
-        console.log('resp', resp);
+        core.info('Coveralls responded:' + resp);
     }
     catch (error) {
         core.setFailed(error.message);

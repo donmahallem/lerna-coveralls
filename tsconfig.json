@@ -17,5 +17,9 @@
         "node_modules",
         "*.spec.ts"
     ],
+    "include": [
+        "./src/**/*.ts",
+        "./src/*.ts"
+    ],
     "baseUrl": "./src"
 }
