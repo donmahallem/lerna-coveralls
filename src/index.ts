@@ -39,7 +39,7 @@ const run: () => Promise<void> = async (): Promise<void> => {
         process.env.COVERALLS_SERVICE_JOB_ID = jobId;
         process.env.COVERALLS_SERVICE_NUMBER = jobId;
 
-        const cwd: string = path.resolve('../manniwatch/' || process.env.GITHUB_WORKSPACE || process.cwd());
+        const cwd: string = path.resolve(process.env.GITHUB_WORKSPACE || process.cwd());
         core.info('Working dir: ' + cwd);
         const lcovFiles: string[] = await promiseGlob(path.join(cwd, './packages/*/coverage/**/lcov.info'));
         if (lcovFiles.length === 0) {
