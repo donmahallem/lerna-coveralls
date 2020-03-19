@@ -12992,7 +12992,8 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
                 parallel: true,
             });
             const covs = yield convert_to_lcov_1.convertLcovToCoveralls(file, coverallsOptions);
-            yield convert_to_lcov_1.sendToCoveralls(covs);
+            const response = yield convert_to_lcov_1.sendToCoveralls(covs);
+            core.info(JSON.stringify(response));
         }
         const payload = {
             'payload': { 'build_num': jobId, 'status': 'done' },

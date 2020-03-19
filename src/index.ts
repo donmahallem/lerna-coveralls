@@ -66,7 +66,8 @@ const run: () => Promise<void> = async (): Promise<void> => {
                 parallel: true,
             });
             const covs: any = await convertLcovToCoveralls(file, coverallsOptions);
-            await sendToCoveralls(covs);
+            const response: any = await sendToCoveralls(covs);
+            core.info(JSON.stringify(response));
         }
 
         const payload: any = {
