@@ -66,7 +66,13 @@ const run: () => Promise<void> = async (): Promise<void> => {
                 parallel: true,
             });
             const covs: any = await convertLcovToCoveralls(file, coverallsOptions);
+            console.log(covs);
             const response: any = await sendToCoveralls(covs);
+            if (response.statusCode === 200) {
+                core.info('Coverage uploaded: ' + response.body)
+            } else {
+                throw new Error('Coveralls responsed with \'' + response.statusCode + '\'. ' + response.body)
+            }
             core.info(JSON.stringify(response));
         }
 

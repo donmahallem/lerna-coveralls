@@ -53,7 +53,8 @@
     "src/*"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "ncc build ./src/index.ts -o ./dist",
+    "start": "ncc run ./src/index.ts",
     "test": "mocha --config .mocharc.yml",
     "test:watch": "mocha --config .mocharc.yml --watch",
     "test:coverage": "nyc --nycrc-path .nycrc.json npm run test",
