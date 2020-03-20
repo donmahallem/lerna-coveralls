@@ -12955,6 +12955,15 @@ const getJobId = () => {
         return sha;
     }
 };
+const getPRNumber = () => {
+    const event = fs_1.readFileSync(process.env.GITHUB_EVENT_PATH || '', 'utf8');
+    if (process.env.GITHUB_EVENT_NAME === 'pull_request') {
+        return JSON.parse(event).number;
+    }
+    else {
+        return undefined;
+    }
+};
 const run = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const githubToken = core.getInput('github-token');
@@ -12964,7 +12973,7 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
         process.env.COVERALLS_GIT_BRANCH = (process.env.GITHUB_REF || '').toString();
         const jobId = getJobId();
         process.env.COVERALLS_SERVICE_JOB_ID = jobId;
-        process.env.COVERALLS_SERVICE_NUMBER = process.env.GITHUB_RUN_NUMBER || '';
+        process.env.COVERALLS_SERVICE_NUMBER = jobId;
         const cwd = path.resolve(process.env.GITHUB_WORKSPACE || process.cwd());
         core.info('Working dir: ' + cwd);
         const lcovFiles = yield promise_glob_1.promiseGlob(path.join(cwd, './packages/*/coverage/**/lcov.info'));
@@ -12994,7 +13003,10 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
                 filepath: coverageWorkingDir,
                 flag_name: packageName,
                 parallel: true,
+                service_job_id: jobId + "_" + packageName,
+                service_pull_request: getPRNumber(),
             });
+            core.info("opts" + JSON.stringify(coverallsOptions));
             const covs = yield convert_to_lcov_1.convertLcovToCoveralls(file, coverallsOptions);
             console.log(covs);
             const response = yield convert_to_lcov_1.sendToCoveralls(covs);
@@ -13015,7 +13027,7 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
             json: true,
             url: `${process.env.COVERALLS_ENDPOINT || 'https://coveralls.io'}/webhook`,
         });
-        core.info('Coveralls responded:' + resp);
+        core.info('Coveralls responded:' + JSON.stringify(resp));
     }
     catch (error) {
         core.setFailed(error.message);
