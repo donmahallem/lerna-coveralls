@@ -68,10 +68,6 @@ const run: () => Promise<void> = async (): Promise<void> => {
             }
             const packageRelativeDir: string = coverageRelativePathParts.slice(0, 2).join(path.sep);
             file = file.replace(/SF\:src/g, 'SF: ' + packageRelativeDir + path.sep + 'src');
-            console.log(file);
-            const p1: string = path.resolve(pathToLcov, cwd);
-            const p2: string = path.resolve(cwd);
-            console.log(p1, p2, path.relative(p2, p1));
             const coverageWorkingDir: string = path.join(cwd, packageRelativeDir);
             core.info('Use working dir: ' + coverageWorkingDir)
             const coverallsOptions: any = await getOptions({

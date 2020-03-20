@@ -12996,10 +12996,6 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
             }
             const packageRelativeDir = coverageRelativePathParts.slice(0, 2).join(path.sep);
             file = file.replace(/SF\:src/g, 'SF: ' + packageRelativeDir + path.sep + 'src');
-            console.log(file);
-            const p1 = path.resolve(pathToLcov, cwd);
-            const p2 = path.resolve(cwd);
-            console.log(p1, p2, path.relative(p2, p1));
             const coverageWorkingDir = path.join(cwd, packageRelativeDir);
             core.info('Use working dir: ' + coverageWorkingDir);
             const coverallsOptions = yield convert_to_lcov_1.getOptions({
