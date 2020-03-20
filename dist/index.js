@@ -12994,10 +12994,12 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
             catch (err) {
                 throw new Error('Lcov file not found.');
             }
+            const packageRelativeDir = coverageRelativePathParts.slice(0, 2).join(path.sep);
+            file.replace('LF:src', 'LF:' + packageRelativeDir + path.sep + 'src');
             const p1 = path.resolve(pathToLcov, cwd);
             const p2 = path.resolve(cwd);
             console.log(p1, p2, path.relative(p2, p1));
-            const coverageWorkingDir = path.join(cwd, coverageRelativePathParts.slice(0, 2).join(path.sep));
+            const coverageWorkingDir = path.join(cwd, packageRelativeDir);
             core.info('Use working dir: ' + coverageWorkingDir);
             const coverallsOptions = yield convert_to_lcov_1.getOptions({
                 filepath: cwd,
