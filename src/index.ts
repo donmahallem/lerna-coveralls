@@ -70,15 +70,15 @@ const run: () => Promise<void> = async (): Promise<void> => {
             file = file.replace(/SF\:src/g, 'SF: ' + packageRelativeDir + path.sep + 'src');
             const coverageWorkingDir: string = path.join(cwd, packageRelativeDir);
             core.info('Use working dir: ' + coverageWorkingDir)
+            const prNumber: number | undefined = getPRNumber()
             const coverallsOptions: any = await getOptions({
                 filepath: cwd,
                 flag_name: packageName,
                 parallel: true,
+                service_job_id: jobId + '_' + packageName,
+                service_pull_request: prNumber != undefined ? '' + prNumber : undefined,
+                service_number: jobId
             });
-            coverallsOptions.service_job_id = jobId + '_' + packageName;
-            coverallsOptions.service_pull_request = getPRNumber();
-            coverallsOptions.service_number = jobId;
-            core.info("opts" + JSON.stringify(coverallsOptions));
             const covs: any = await convertLcovToCoveralls(file, coverallsOptions);
             console.log(covs);
             const response: any = await sendToCoveralls(covs);
