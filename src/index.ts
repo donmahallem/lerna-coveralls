@@ -79,7 +79,7 @@ const run: () => Promise<void> = async (): Promise<void> => {
                 flag_name: packageName,
                 parallel: true,
             });
-            coverallsOptions.service_job_id = jobId + "_" + packageName;
+            coverallsOptions.service_job_id = jobId;// + "_" + packageName;
             coverallsOptions.service_pull_request = getPRNumber();
             coverallsOptions.service_number = jobId;
             core.info("opts" + JSON.stringify(coverallsOptions));
