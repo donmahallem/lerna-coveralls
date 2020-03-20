@@ -12995,7 +12995,7 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
                 throw new Error('Lcov file not found.');
             }
             const packageRelativeDir = coverageRelativePathParts.slice(0, 2).join(path.sep);
-            file.replace(/SF\:src/g, 'SF: ' + packageRelativeDir + path.sep + 'src');
+            file = file.replace(/SF\:src/g, 'SF: ' + packageRelativeDir + path.sep + 'src');
             console.log(file);
             const p1 = path.resolve(pathToLcov, cwd);
             const p2 = path.resolve(cwd);
