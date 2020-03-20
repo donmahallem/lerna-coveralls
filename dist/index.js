@@ -13009,7 +13009,7 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
                 parallel: true,
                 service_job_id: jobId,
                 service_pull_request: prNumber != undefined ? '' + prNumber : undefined,
-                service_number: jobId
+                service_number: jobId + '_' + packageName,
             });
             const covs = yield convert_to_lcov_1.convertLcovToCoveralls(file, coverallsOptions);
             console.log(covs);
