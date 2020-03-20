@@ -80,7 +80,7 @@ const run: () => Promise<void> = async (): Promise<void> => {
                 flag_name: packageName,
                 parallel: true,
                 service_job_id: jobId,// + '_' + packageName,
-                service_number: jobId + '_' + packageName,
+                service_number: jobId,// + '_' + packageName,
                 service_pull_request: prNumber != undefined ? '' + prNumber : undefined,
             });
             const covs: any = await convertLcovToCoveralls(file, coverallsOptions);
