@@ -75,9 +75,9 @@ const run: () => Promise<void> = async (): Promise<void> => {
                 filepath: coverageWorkingDir,
                 flag_name: packageName,
                 parallel: true,
-                service_job_id: jobId + "_" + packageName,
-                service_pull_request: getPRNumber(),
             });
+            coverallsOptions.service_job_id = jobId + "_" + packageName;
+            coverallsOptions.service_pull_request = getPRNumber();
             core.info("opts" + JSON.stringify(coverallsOptions));
             const covs: any = await convertLcovToCoveralls(file, coverallsOptions);
             console.log(covs);

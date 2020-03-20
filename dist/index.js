@@ -13003,9 +13003,9 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
                 filepath: coverageWorkingDir,
                 flag_name: packageName,
                 parallel: true,
-                service_job_id: jobId + "_" + packageName,
-                service_pull_request: getPRNumber(),
             });
+            coverallsOptions.service_job_id = jobId + "_" + packageName;
+            coverallsOptions.service_pull_request = getPRNumber();
             core.info("opts" + JSON.stringify(coverallsOptions));
             const covs = yield convert_to_lcov_1.convertLcovToCoveralls(file, coverallsOptions);
             console.log(covs);
