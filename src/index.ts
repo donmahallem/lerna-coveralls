@@ -67,7 +67,7 @@ const run: () => Promise<void> = async (): Promise<void> => {
                 throw new Error('Lcov file not found.');
             }
             const packageRelativeDir: string = coverageRelativePathParts.slice(0, 2).join(path.sep);
-            file.replace('LF:src', 'LF:' + packageRelativeDir + path.sep + 'src');
+            file.replace('SF:src', 'SF:' + packageRelativeDir + path.sep + 'src');
             const p1: string = path.resolve(pathToLcov, cwd);
             const p2: string = path.resolve(cwd);
             console.log(p1, p2, path.relative(p2, p1));
