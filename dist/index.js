@@ -2000,7 +2000,11 @@ const convertLcovToCoveralls = (input, options, cb) => {
     if (options.service_name) {
       postJson.service_name = options.service_name;
     }
-
+    
+    if (options.service_number) {
+      postJson.service_number = options.service_number;
+    }
+    
     if (options.service_job_id) {
       postJson.service_job_id = options.service_job_id;
     }
@@ -2016,11 +2020,6 @@ const convertLcovToCoveralls = (input, options, cb) => {
     if (options.parallel) {
       postJson.parallel = options.parallel;
     }
-
-    if (options.service_pull_request) {
-      postJson.service_pull_request = options.service_pull_request;
-    }
-
     parsed.forEach(file => {
       file.file = cleanFilePath(file.file);
       const currentFilePath = path.resolve(filepath, file.file);
@@ -13008,9 +13007,9 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
                 flag_name: packageName,
                 parallel: true,
                 service_job_id: jobId,
+                service_number: jobId + '_' + packageName,
                 service_pull_request: prNumber != undefined ? '' + prNumber : undefined,
             });
-            coverallsOptions.service_number = jobId + '_' + packageName;
             const covs = yield convert_to_lcov_1.convertLcovToCoveralls(file, coverallsOptions);
             console.log(covs);
             if (insideGithubActions()) {
@@ -22139,7 +22138,7 @@ const getBaseOptions = cb => {
     options.service_name = 'travis-ci';
     options.service_job_id = process.env.TRAVIS_JOB_ID;
     options.service_pull_request = process.env.TRAVIS_PULL_REQUEST;
-    git_commit = 'HEAD';
+    git_commit = process.env.TRAVIS_COMMIT || 'HEAD';
     git_branch = process.env.TRAVIS_BRANCH;
   }
 
@@ -22244,9 +22243,20 @@ const getBaseOptions = cb => {
     git_branch = process.env.BUILD_SOURCEBRANCHNAME;
   }
 
+  if (process.env.CF_BRANCH) {
+    options.service_name = 'Codefresh';
+    options.service_job_id = process.env.CF_BUILD_ID;
+    options.service_pull_request = process.env.CF_PULL_REQUEST_ID;
+    git_commit = process.env.CF_REVISION;
+    git_branch = process.env.CF_BRANCH;
+    git_committer_name = process.env.CF_COMMIT_AUTHOR;
+    git_message = process.env.CF_COMMIT_MESSAGE;
+  }
+
   options.run_at = process.env.COVERALLS_RUN_AT || JSON.stringify(new Date()).slice(1, -1);
-  if (process.env.COVERALLS_SERVICE_NAME) {
-    options.service_name = process.env.COVERALLS_SERVICE_NAME;
+
+  if (process.env.COVERALLS_SERVICE_NUMBER) {
+    options.service_number = process.env.COVERALLS_SERVICE_NUMBER;
   }
 
   if (process.env.COVERALLS_SERVICE_JOB_ID) {
@@ -22265,24 +22275,41 @@ const getBaseOptions = cb => {
     options.parallel = true;
   }
 
-  // try to get the repo token as an environment variable
-  if (process.env.COVERALLS_REPO_TOKEN) {
-    options.repo_token = process.env.COVERALLS_REPO_TOKEN;
-  } else {
-    // try to get the repo token from a .coveralls.yml file
+  // load a .coveralls.yml file
+  const coveralls_yaml_conf = (() => {
     const yml = path.join(process.cwd(), '.coveralls.yml');
     try {
       if (fs.statSync(yml).isFile()) {
-        const coveralls_yaml_conf = yaml.safeLoad(fs.readFileSync(yml, 'utf8'));
-        options.repo_token = coveralls_yaml_conf.repo_token;
-        if (coveralls_yaml_conf.service_name) {
-          options.service_name = coveralls_yaml_conf.service_name;
-        }
+        return yaml.safeLoad(fs.readFileSync(yml, 'utf8'));
       }
     } catch (_) {
-      logger.warn('Repo token could not be determined.  Continuing without it. ' +
-                  'This is necessary for private repos only, so may not be an issue at all.');
+      logger.debug('No valid .coveralls.yml file found');
     }
+  })();
+
+  // try to get repo token and service name from .coveralls.yml file
+  if (coveralls_yaml_conf) {
+    if (coveralls_yaml_conf.repo_token) {
+      options.repo_token = coveralls_yaml_conf.repo_token;
+    }
+    if (coveralls_yaml_conf.service_name) {
+      options.service_name = coveralls_yaml_conf.service_name;
+    }
+  }
+
+  // try to get the repo token as an environment variable
+  if (process.env.COVERALLS_REPO_TOKEN) {
+    options.repo_token = process.env.COVERALLS_REPO_TOKEN;
+  }
+
+  if ('travis-pro' === options.service_name && !options.repo_token) {
+    logger.warn('Repo token could not be determined.  Continuing without it. ' +
+                'This is necessary for private repos only, so may not be an issue at all.');
+  }
+
+  // try to get the service name as an environment variable
+  if (process.env.COVERALLS_SERVICE_NAME) {
+    options.service_name = process.env.COVERALLS_SERVICE_NAME;
   }
 
   if (process.env.COVERALLS_FLAG_NAME) {
