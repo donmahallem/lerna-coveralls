@@ -12964,7 +12964,7 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
         process.env.COVERALLS_GIT_BRANCH = (process.env.GITHUB_REF || '').toString();
         const jobId = getJobId();
         process.env.COVERALLS_SERVICE_JOB_ID = jobId;
-        process.env.COVERALLS_SERVICE_NUMBER = jobId;
+        process.env.COVERALLS_SERVICE_NUMBER = process.env.GITHUB_RUN_NUMBER || '';
         const cwd = path.resolve(process.env.GITHUB_WORKSPACE || process.cwd());
         core.info('Working dir: ' + cwd);
         const lcovFiles = yield promise_glob_1.promiseGlob(path.join(cwd, './packages/*/coverage/**/lcov.info'));
