@@ -16,8 +16,8 @@ const getJobId: () => string = (): string => {
     }
     const sha: string = (process.env.GITHUB_SHA || 'sha').toString();
 
-    const event: string = readFileSync(process.env.GITHUB_EVENT_PATH || '', 'utf8');
     if (process.env.GITHUB_EVENT_NAME === 'pull_request') {
+        const event: string = readFileSync(process.env.GITHUB_EVENT_PATH || '', 'utf8');
         const pr: string = JSON.parse(event).number;
         process.env.CI_PULL_REQUEST = pr;
         return `${sha}-PR-${pr}`;
@@ -27,12 +27,15 @@ const getJobId: () => string = (): string => {
 }
 
 const getPRNumber: () => number | undefined = (): number | undefined => {
-    const event: string = readFileSync(process.env.GITHUB_EVENT_PATH || '', 'utf8');
     if (process.env.GITHUB_EVENT_NAME === 'pull_request') {
+        const event: string = readFileSync(process.env.GITHUB_EVENT_PATH || '', 'utf8');
         return JSON.parse(event).number;
     } else {
         return undefined;
     }
+}
+const insideGithubActions: () => boolean = (): boolean => {
+    return (process.env.GITHUB_ACTIONS === "true")
 }
 const run: () => Promise<void> = async (): Promise<void> => {
     try {
@@ -49,7 +52,8 @@ const run: () => Promise<void> = async (): Promise<void> => {
 
         const cwd: string = path.resolve(process.env.GITHUB_WORKSPACE || process.cwd());
         core.info('Working dir: ' + cwd);
-        const lcovFiles: string[] = await promiseGlob(path.join(cwd, './packages/*/coverage/**/lcov.info'));
+        const lcovFiles: string[] = await promiseGlob(path.join(cwd, 'packages' + path.sep + '*'
+            + path.sep + 'coverage' + path.sep + '**' + path.sep + 'lcov.info'));
         if (lcovFiles.length === 0) {
             core.warning('No lcov.info files found');
             return;
@@ -81,11 +85,15 @@ const run: () => Promise<void> = async (): Promise<void> => {
             });
             const covs: any = await convertLcovToCoveralls(file, coverallsOptions);
             console.log(covs);
-            const response: any = await sendToCoveralls(covs);
-            if (response.statusCode === 200) {
-                core.info('Coverage uploaded: ' + response.body)
+            if (insideGithubActions()) {
+                const response: any = await sendToCoveralls(covs);
+                if (response.statusCode === 200) {
+                    core.info('Coverage uploaded: ' + response.body)
+                } else {
+                    throw new Error('Coveralls responsed with \'' + response.statusCode + '\'. ' + response.body)
+                }
             } else {
-                throw new Error('Coveralls responsed with \'' + response.statusCode + '\'. ' + response.body)
+                core.info("Not submitting");
             }
         }
 
@@ -94,7 +102,10 @@ const run: () => Promise<void> = async (): Promise<void> => {
             'repo_name': process.env.GITHUB_REPOSITORY,
             'repo_token': githubToken,
         };
-
+        if (!insideGithubActions()) {
+            core.info("Not submitting");
+            return;
+        }
         const resp: reqp.FullResponse = await reqp.post({
             body: payload,
             json: true,

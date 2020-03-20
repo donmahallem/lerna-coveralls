@@ -12945,8 +12945,8 @@ const getJobId = () => {
         return process.env.GITHUB_RUN_ID;
     }
     const sha = (process.env.GITHUB_SHA || 'sha').toString();
-    const event = fs_1.readFileSync(process.env.GITHUB_EVENT_PATH || '', 'utf8');
     if (process.env.GITHUB_EVENT_NAME === 'pull_request') {
+        const event = fs_1.readFileSync(process.env.GITHUB_EVENT_PATH || '', 'utf8');
         const pr = JSON.parse(event).number;
         process.env.CI_PULL_REQUEST = pr;
         return `${sha}-PR-${pr}`;
@@ -12956,13 +12956,16 @@ const getJobId = () => {
     }
 };
 const getPRNumber = () => {
-    const event = fs_1.readFileSync(process.env.GITHUB_EVENT_PATH || '', 'utf8');
     if (process.env.GITHUB_EVENT_NAME === 'pull_request') {
+        const event = fs_1.readFileSync(process.env.GITHUB_EVENT_PATH || '', 'utf8');
         return JSON.parse(event).number;
     }
     else {
         return undefined;
     }
+};
+const insideGithubActions = () => {
+    return (process.env.GITHUB_ACTIONS === "true");
 };
 const run = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -12976,7 +12979,8 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
         process.env.COVERALLS_SERVICE_NUMBER = jobId;
         const cwd = path.resolve(process.env.GITHUB_WORKSPACE || process.cwd());
         core.info('Working dir: ' + cwd);
-        const lcovFiles = yield promise_glob_1.promiseGlob(path.join(cwd, './packages/*/coverage/**/lcov.info'));
+        const lcovFiles = yield promise_glob_1.promiseGlob(path.join(cwd, 'packages' + path.sep + '*'
+            + path.sep + 'coverage' + path.sep + '**' + path.sep + 'lcov.info'));
         if (lcovFiles.length === 0) {
             core.warning('No lcov.info files found');
             return;
@@ -13009,12 +13013,17 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
             });
             const covs = yield convert_to_lcov_1.convertLcovToCoveralls(file, coverallsOptions);
             console.log(covs);
-            const response = yield convert_to_lcov_1.sendToCoveralls(covs);
-            if (response.statusCode === 200) {
-                core.info('Coverage uploaded: ' + response.body);
+            if (insideGithubActions()) {
+                const response = yield convert_to_lcov_1.sendToCoveralls(covs);
+                if (response.statusCode === 200) {
+                    core.info('Coverage uploaded: ' + response.body);
+                }
+                else {
+                    throw new Error('Coveralls responsed with \'' + response.statusCode + '\'. ' + response.body);
+                }
             }
             else {
-                throw new Error('Coveralls responsed with \'' + response.statusCode + '\'. ' + response.body);
+                core.info("Not submitting");
             }
         }
         const payload = {
@@ -13022,6 +13031,10 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
             'repo_name': process.env.GITHUB_REPOSITORY,
             'repo_token': githubToken,
         };
+        if (!insideGithubActions()) {
+            core.info("Not submitting");
+            return;
+        }
         const resp = yield reqp.post({
             body: payload,
             json: true,
