@@ -25,6 +25,15 @@ const getJobId: () => string = (): string => {
         return sha;
     }
 }
+
+const getPRNumber: () => number | undefined = (): number | undefined => {
+    const event: string = readFileSync(process.env.GITHUB_EVENT_PATH || '', 'utf8');
+    if (process.env.GITHUB_EVENT_NAME === 'pull_request') {
+        return JSON.parse(event).number;
+    } else {
+        return undefined;
+    }
+}
 const run: () => Promise<void> = async (): Promise<void> => {
     try {
         const githubToken: string = core.getInput('github-token');
@@ -66,6 +75,8 @@ const run: () => Promise<void> = async (): Promise<void> => {
                 filepath: coverageWorkingDir,
                 flag_name: packageName,
                 parallel: true,
+                service_job_id: jobId + "_" + packageName,
+                service_pull_request: getPRNumber(),
             });
             const covs: any = await convertLcovToCoveralls(file, coverallsOptions);
             console.log(covs);
