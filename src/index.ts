@@ -45,7 +45,7 @@ const run: () => Promise<void> = async (): Promise<void> => {
 
         const jobId: string = getJobId();
         process.env.COVERALLS_SERVICE_JOB_ID = jobId;
-        process.env.COVERALLS_SERVICE_NUMBER = process.env.GITHUB_RUN_NUMBER || '';
+        process.env.COVERALLS_SERVICE_NUMBER = jobId;
 
         const cwd: string = path.resolve(process.env.GITHUB_WORKSPACE || process.cwd());
         core.info('Working dir: ' + cwd);
