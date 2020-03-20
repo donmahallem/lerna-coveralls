@@ -68,6 +68,7 @@ const run: () => Promise<void> = async (): Promise<void> => {
             }
             const packageRelativeDir: string = coverageRelativePathParts.slice(0, 2).join(path.sep);
             file.replace('SF:src', 'SF:' + packageRelativeDir + path.sep + 'src');
+            console.log(file);
             const p1: string = path.resolve(pathToLcov, cwd);
             const p2: string = path.resolve(cwd);
             console.log(p1, p2, path.relative(p2, p1));
