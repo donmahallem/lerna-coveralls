@@ -12999,7 +12999,7 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
                 throw new Error('Lcov file not found.');
             }
             const packageRelativeDir = coverageRelativePathParts.slice(0, 2).join(path.sep);
-            file = file.replace(/SF\:src/g, 'SF: ' + packageRelativeDir + path.sep + 'src');
+            file = file.replace(/SF\:src/g, 'SF:' + cwd + path.sep + packageRelativeDir + path.sep + 'src');
             const coverageWorkingDir = path.join(cwd, packageRelativeDir);
             core.info('Use working dir: ' + coverageWorkingDir);
             const prNumber = getPRNumber();
