@@ -78,7 +78,7 @@ const run: () => Promise<void> = async (): Promise<void> => {
                 service_job_id: jobId + "_" + packageName,
                 service_pull_request: getPRNumber(),
             });
-            console.log("opts", JSON.stringify(coverallsOptions));
+            core.info("opts" + JSON.stringify(coverallsOptions));
             const covs: any = await convertLcovToCoveralls(file, coverallsOptions);
             console.log(covs);
             const response: any = await sendToCoveralls(covs);
