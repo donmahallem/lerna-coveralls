@@ -13026,9 +13026,16 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
         const resp = yield reqp.post({
             body: payload,
             json: true,
+            resolveWithFullResponse: true,
             url: `${process.env.COVERALLS_ENDPOINT || 'https://coveralls.io'}/webhook`,
         });
-        core.info('Coveralls responded:' + JSON.stringify(resp));
+        if (resp.statusCode !== 200) {
+            core.setFailed("Coveralls report failed with: " + JSON.stringify(resp.body));
+            return;
+        }
+        else {
+            core.info('Coverage uploaded');
+        }
     }
     catch (error) {
         core.setFailed(error.message);
