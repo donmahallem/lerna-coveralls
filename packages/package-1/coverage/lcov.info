@@ -1,5 +1,5 @@
 TN:
-SF:src\flow-api-client.ts
+SF:src/flow-api-client.ts
 FN:21,(anonymous_0)
 FN:31,(anonymous_1)
 FN:35,(anonymous_2)
@@ -77,7 +77,7 @@ BRF:6
 BRH:0
 end_of_record
 TN:
-SF:src\index.ts
+SF:src/index.ts
 FNF:0
 FNH:0
 DA:5,1
