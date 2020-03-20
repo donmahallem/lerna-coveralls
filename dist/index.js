@@ -13000,7 +13000,7 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
             const coverageWorkingDir = path.join(cwd, coverageRelativePathParts.slice(0, 2).join(path.sep));
             core.info('Use working dir: ' + coverageWorkingDir);
             const coverallsOptions = yield convert_to_lcov_1.getOptions({
-                filepath: coverageWorkingDir,
+                filepath: cwd,
                 flag_name: packageName,
                 parallel: true,
             });

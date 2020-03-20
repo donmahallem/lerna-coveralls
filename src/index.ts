@@ -72,7 +72,7 @@ const run: () => Promise<void> = async (): Promise<void> => {
             const coverageWorkingDir: string = path.join(cwd, coverageRelativePathParts.slice(0, 2).join(path.sep));
             core.info('Use working dir: ' + coverageWorkingDir)
             const coverallsOptions: any = await getOptions({
-                filepath: coverageWorkingDir,
+                filepath: cwd,
                 flag_name: packageName,
                 parallel: true,
             });
