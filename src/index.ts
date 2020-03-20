@@ -79,7 +79,7 @@ const run: () => Promise<void> = async (): Promise<void> => {
                 filepath: cwd,
                 flag_name: packageName,
                 parallel: true,
-                service_job_id: jobId + '_' + packageName,
+                service_job_id: jobId,// + '_' + packageName,
                 service_pull_request: prNumber != undefined ? '' + prNumber : undefined,
                 service_number: jobId
             });

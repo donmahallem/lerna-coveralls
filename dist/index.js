@@ -13007,7 +13007,7 @@ const run = () => __awaiter(void 0, void 0, void 0, function* () {
                 filepath: cwd,
                 flag_name: packageName,
                 parallel: true,
-                service_job_id: jobId + '_' + packageName,
+                service_job_id: jobId,
                 service_pull_request: prNumber != undefined ? '' + prNumber : undefined,
                 service_number: jobId
             });
