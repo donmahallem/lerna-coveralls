@@ -32,7 +32,7 @@
     "@types/node": "13.13.45",
     "@types/request-promise-native": "1.0.17",
     "@types/sinon": "7.5.2",
-    "@zeit/ncc": "0.21.1",
+    "@zeit/ncc": "0.22.3",
     "chai": "4.2.0",
     "mocha": "7.1.1",
     "nyc": "15.0.0",
