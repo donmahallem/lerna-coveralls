@@ -27,7 +27,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "@types/chai": "4.2.19",
+    "@types/chai": "4.2.20",
     "@types/mocha": "8.2.2",
     "@types/node": "14.17.4",
     "@types/request-promise-native": "1.0.17",
