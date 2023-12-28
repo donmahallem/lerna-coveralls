@@ -33,7 +33,7 @@
     "@types/request-promise-native": "1.0.21",
     "@types/sinon": "17.0.2",
     "@zeit/ncc": "0.22.3",
-    "chai": "4.3.10",
+    "chai": "5.0.0",
     "mocha": "10.2.0",
     "nyc": "15.1.0",
     "sinon": "17.0.1",
