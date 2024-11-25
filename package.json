@@ -29,7 +29,7 @@
   "devDependencies": {
     "@types/chai": "5.0.1",
     "@types/mocha": "10.0.10",
-    "@types/node": "22.9.3",
+    "@types/node": "22.9.4",
     "@types/request-promise-native": "1.0.21",
     "@types/sinon": "17.0.3",
     "@zeit/ncc": "0.22.3",
