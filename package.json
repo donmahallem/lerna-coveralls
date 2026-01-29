@@ -43,7 +43,7 @@
     "typescript": "5.9.3"
   },
   "dependencies": {
-    "@actions/core": "^2.0.3",
+    "@actions/core": "^3.0.0",
     "coveralls": "^3.1.1",
     "glob": "^13.0.0",
     "request-promise-native": "^1.0.9"
