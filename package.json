@@ -31,7 +31,7 @@
     "@types/mocha": "10.0.10",
     "@types/node": "24.19.2",
     "@types/request-promise-native": "1.0.21",
-    "@types/sinon": "22.0.0",
+    "@types/sinon": "22.0.1",
     "@zeit/ncc": "0.22.3",
     "chai": "6.3.0",
     "mocha": "12.0.0",
